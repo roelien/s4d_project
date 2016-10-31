@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="stylesheet" href="../shared.css" />
+   </head>
+   <body>
+      <h1>Vibration API</h1>
+
+      <span id="v-unsupported" class="api-support hidden">API not supported</span>
+
+      <div class="buttons-wrapper">
+         <button id="button-play-v-once" class="button">Vibrate 1x</button>
+         <button id="button-play-v-thrice" class="button">Vibrate 3x</button>
+         <button id="button-stop-v" class="button">Stop</button>
+      </div>
+
+      <script>
+         window.navigator = window.navigator || {};
+         if (navigator.vibrate === undefined) { //Als api niet wordt gesupport
+            document.getElementById('v-unsupported').classList.remove('hidden');
+            ['button-play-v-once', 'button-play-v-thrice', 'button-stop-v'].forEach(function(elementId) {
+               document.getElementById(elementId).setAttribute('disabled', 'disabled');
+            });
+         } else { // Als Api wordt gesupport
+            document.getElementById('button-play-v-once').addEventListener('click', function() {
+               navigator.vibrate(1000);
+            });
+            document.getElementById('button-play-v-thrice').addEventListener('click', function() {
+               navigator.vibrate([1000, 500, 1000, 500, 2000]);
+            });
+            document.getElementById('button-stop-v').addEventListener('click', function() {
+               navigator.vibrate(0);
+            });
+         }
+      </script>
+   </body>
+</html>
+
