@@ -1,0 +1,26 @@
+   *{
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+   }
+   body{
+      max-width: 500px;
+      margin: 2em auto;
+      padding: 0 0.5em;
+      font-size: 20px;
+   }
+   .hidden{
+      display: none;
+   }
+   .vierkant{
+      width: 150px;
+      height: 150px;
+      background-color: red;
+      position: relative;
+      margin: 30px auto;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+   }
+   .value{
+      font-weight: bold;
+   }
