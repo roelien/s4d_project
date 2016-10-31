@@ -1,0 +1,178 @@
+<html>
+<head><title>opdracht 16.4</title></head>
+<body>
+<canvas id="mijnCanvasje" width="500" height="300"
+        style="border: 1px dotted black">
+</canvas>
+<div id="score">
+   Score speler 1: 0 <br>    Score speler 2: 0
+</div>
+
+<script>
+   
+   function drawDisc( x,y,r ) {  // Tekent de bal
+      theContext.beginPath();
+      theContext.arc(x,y,r,0,Math.PI*2,false);
+      theContext.closePath();
+      theContext.fill();
+   }
+   function drawPlatform1(x, y) {   // Tekent het platform links
+      theContext.beginPath();
+      theContext.rect(platform1X, platform1Y, 10, hoogtePlatform)
+      theContext.closePath();
+      theContext.fill();
+      theContext.stroke();
+   }
+
+   function drawPlatform2(x, y) {   // Tekent het platform rechts
+      theContext.beginPath();
+      theContext.rect(platform2X, platform2Y, 10, hoogtePlatform)
+      theContext.closePath();
+      theContext.fill();
+      theContext.stroke();
+   }
+ 
+   function startDrawing(canvasId) {
+      var canvasElement = document.getElementById(canvasId);
+      var drawingContext = canvasElement.getContext("2d");
+      return drawingContext;
+   }
+ 
+   var theContext = startDrawing("mijnCanvasje")
+ 
+   var x = 100;  // houdt de veranderende horizontale positie bij
+   var y = 100;  // houd de veranderende verticale positie bij
+   var frameTeller = 0;
+   var stapX = 5;    // De X-as snelheid (in frames) per seconde
+   var stapY = 5;    // De Y-as snelheid (in frames) per seconde
+   var straal = 10;  // De straal van de bal
+   var hoogtePlatform = 75;   // De hoogte van de platform (in pixels)
+   var platform1X = 20  // Beginpositie X-as platform links
+   var platform1Y    // Beginpositie Y-as (niet ingesteld)
+   var onderkantPlatform1
+   var bovenkantPlatform1
+   var platform2X = 480    // Beginpositie X-as platform rechts
+   var platform2Y = 100    // Beginpositie Y-as platform rechts
+   var onderkantPlatform2
+   var bovenkantPlatform2
+   var hitCounter = 0   // Variable die bijhoud hoe vaak de bal op het platform komt
+   var speler1Count = 0    // Variable die bijhoud hoe veel punten speler 1 heeft
+   var speler2Count = 0    // Variable die bijhoud hoe veel punten speler 2 heeft
+    
+   setInterval( maakSpel, 40 )   // 40 frames per seconde
+   
+   var cursorX
+   var cursorY 
+
+   document.onmousemove = function(a){    // Bijhouden welke coördinaten de muis heeft
+      cursorX = a.pageX
+      cursorY = a.pageY
+   }
+
+   document.onkeydown = checkKey;   // Checken of er een toets wordt ingedrukt
+      function checkKey(e) {
+         e = e || window.event;
+         if (e.keyCode == '37') {   // Pijltje links
+         }
+         else if (e.keyCode == '38') {    // Pijltje omhoog
+            platform2Y-=10
+            onderkantPlatform2 = platform2Y + hoogtePlatform   // Groote platform rechts berekenen
+            bovenkantPlatform2 = platform2Y
+         }
+         else if (e.keyCode == '39') {    // Pijltje rechts
+         }
+         else if (e.keyCode == '40') {    // Pijltje beneden
+            platform2Y+=10
+            onderkantPlatform2 = platform2Y + hoogtePlatform   //Groote platform rechts berekenen
+            bovenkantPlatform2 = platform2Y
+         }
+      }
+
+   function maakSpel() {   // Het spel beginnen
+      platform1Y = cursorY    // Y-as van de muis = Y-as van platform
+      onderkantPlatform1 = platform1Y + hoogtePlatform   // Grootte platform links berekenen
+      bovenkantPlatform1 = platform1Y
+      frameTeller++;
+   	x += stapX;
+   	y += stapY;
+   	theContext.clearRect(0,0,500,300);    // wis het canvas
+   	drawDisc( x, y, straal );
+      drawPlatform1(100, 100)    // Teken linker platform op locatie 100, 100
+      drawPlatform2(100, 100)    // Teken rechter platform op locatie 100, 100
+   	
+   	if(y < onderkantPlatform1 && y > bovenkantPlatform1 && x <= platform1X + straal){  // Checken of het linker platform wordt geraakt
+   		stapX = -stapX;
+         hitCounter++
+         console.log(hitCounter)
+         if (hitCounter % 5 == 0) {    // Bij elke 5 aanrakingen de balSneller() functie uitoeren
+            console.log("Bal sneller!")
+            balSneller()
+         }
+   	}
+      if (y < onderkantPlatform2 && y > bovenkantPlatform2 && x >= platform2X && x < platform2X + 10){   // Checken of het rechter platform wordt geraakt
+         stapX = -stapX
+         hitCounter++
+         console.log(hitCounter)
+         if (hitCounter % 5 == 0){  // Bij elke 5 aanrakingen de balSneller() functie uitoeren
+            console.log("Bal sneller!")
+            balSneller()
+         }
+      }
+   	if ( y >= 300 - straal || y <= straal ){    // Checken of de boven en onderkant van het canvas wordt geraakt
+   		stapY = -stapY;
+   	}
+      if ( x <= 0 || x >= 500){  // Checken of de bal langs een platform gaat
+         if (x <= 0){   // Gaat de bal voorbij aan speler 1, dan wint speler 2
+            alert("Speler 2 heeft gewonnen!")
+            //location.reload()
+            speler2Count++
+            document.getElementById("score").innerHTML = "Score speler 1: " + speler1Count + "<br> Score speler 2: " + speler2Count    // Update de score
+            resetBal("speler2")  //
+         }
+         if (x >= 500){    // Gaat de bal voorbij aan speler 2, dan wint speler 1
+            alert("Speler 1 heeft gewonnen!")
+            //location.reload()
+            speler1Count++
+            document.getElementById("score").innerHTML = "Score speler 1: " + speler1Count + "<br> Score speler 2: " + speler2Count    // Update de score
+            resetBal("speler1")
+         }
+      }
+   }
+
+   function resetBal(winnaar) {
+      if (winnaar == "speler1") {
+         x = 100
+         y = 100
+         stapX=5
+         stapY=5
+         hitCounter = 0
+         //console.log(hitCounter)
+      }
+      if (winnaar == "speler2") {
+         x = 400
+         y = 200
+         stapX=-5
+         stapY=-5
+         hitCounter = 0
+         //console.log(hitCounter)
+      }
+   }
+
+   function balSneller() {    // De snelheid van de bal met 2px verhogen
+      if (stapX > 0) {  // Checken of de X-coördinaat van de bal naar rechts gaat
+         stapX+=2
+      }
+      if (stapY > 0) {  // Checken of de Y-coörinaat van de bal naar beneden gaat
+         stapY+=2
+      }
+      if (stapX < 0) {  // Checken of de X-coördinaat van de bal naar links gaat
+         stapX-=2
+      }
+      if (stapY < 0) {  // Checken of de Y-coördinaat van de bal naar boven gaat
+         stapY-=2
+      }
+   }
+
+</script>
+</body>
+</html>
