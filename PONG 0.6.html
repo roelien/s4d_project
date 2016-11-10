@@ -90,8 +90,8 @@ html, body {
    }
     resizeCanvas();
  
-   var x = 100;  // houdt de veranderende horizontale positie bij
-   var y = 100;  // houd de veranderende verticale positie bij
+   var x = (canvasWidth/100)*25;  // houdt de veranderende horizontale positie bij
+   var y = (canvasHeight/2);  // houd de veranderende verticale positie bij
    var frameTeller = 0;
    var stapX = (canvasWidth/100)*1;    // De X-as snelheid (in frames) per seconde
    var stapY = (canvasWidth/100)*1;    // De Y-as snelheid (in frames) per seconde
@@ -175,22 +175,23 @@ html, body {
       if (hitCounter % 2 != 0) {
       	if(x <= (canvasWidth/100)*5 + straal + 10 && x >= (canvasWidth/100)*5){   // Checken of het linker platform wordt geraakt 
             hitCounter++
-            //console.log(hitCounter)
             if (hitCounter % 5 == 0) {    // Bij elke 5 aanrakingen de balSneller() functie uitoeren
-               console.log("Bal sneller!")
                balSneller()
             }
-            if (y >= bovenkantPlatform1 - straal && y <= bovenkantPlatform1 && x >= (canvasWidth/100)*5 && x <= (canvasWidth/100)*5 + 10 + straal){
+            if (y >= bovenkantPlatform1 - straal && y <= bovenkantPlatform1 + straal && x >= (canvasWidth/100)*5 && x <= (canvasWidth/100)*5 + 10 + straal){
                stapY =- stapY
-               stapX =- stapX
+               if (stapX < 0) {
+                        stapX =- stapX
+               }
                navigator.vibrate(200);  
-               console.log("bovenkantPlatform1")
             }
             if (y <= onderkantPlatform1 && y >= onderkantPlatform1 - straal && x >= (canvasWidth/100)*5 && x <= (canvasWidth/100)*5 + 10 + straal) {
                stapY =- stapY
                stapX =- stapX
+               if (stapX > 0){
+                       stapX =- stapX
+               }
                navigator.vibrate(200);  
-               console.log("onderkantPlatform1")
             }
             if (y <= onderkantPlatform1 + straal && y >= bovenkantPlatform1 + straal){
             	stapX =-stapX
@@ -204,23 +205,25 @@ html, body {
             hitCounter++
             console.log(hitCounter)
             if (hitCounter % 5 == 0){  // Bij elke 5 aanrakingen de balSneller() functie uitoeren
-               console.log("Bal sneller!")
                balSneller()
             }
             if (y >= (balk.positie.y + 75) - straal && y <= (balk.positie.y + 75) && x >= (canvasWidth/100)*95 - 10 - straal && x <= (canvasWidth/100)*95){  
-               stapX =- stapX
                stapY =- stapY
+               if (stapX < 0){
+                       stapX =- stapX
+               }
                navigator.vibrate(200);  
             }
             if (y <= (balk.positie.y + 75 - hoogtePlatform) + straal && y >= (balk.positie.y + 75 - hoogtePlatform) && x >= (canvasWidth/100)*95 - 10 - straal && x <= (canvasWidth/100)*95) {
-               stapX =- stapX
                stapY =- stapY
+               if (stapX > 0){
+                       stapX =- stapX
+               }
                navigator.vibrate(200);  
             }
             if (y < balk.positie.y + 95 && y > balk.positie.y) {
                stapX = -stapX
                navigator.vibrate(200);  
-               console.log("TOUCH")
             }
          }
       }
