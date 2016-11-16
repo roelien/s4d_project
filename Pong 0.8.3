@@ -107,21 +107,21 @@ html, body {
         return drawingContext;
     }
    
-    var canvasWidth = window.innerWidth
-    var canvasHeight = window.innerHeight
+    var canvasWidth = window.innerWidth     //De breedte van de window berekenen   
+    var canvasHeight = window.innerHeight   //De hoogte van de window berekenen
     var theContext = startDrawing("mijnCanvasje")
     window.addEventListener('resize', resizeCanvas, false)
     function resizeCanvas() {
-        mijnCanvasje.width = canvasWidth
-        mijnCanvasje.height = canvasHeight
+        mijnCanvasje.width = canvasWidth    //Breedte van het canvas gelijk stellen aan de breedte van de window
+        mijnCanvasje.height = canvasHeight  //Hoogte van het canvas gelijk stellen aan de hoogte van de window
     }
     resizeCanvas();
  
     var x = (canvasWidth/100)*25;  // houdt de veranderende horizontale positie bij
     var y = (canvasHeight/2);  // houd de veranderende verticale positie bij
     var frameTeller = 0;
-    var stapX = 0//(canvasWidth/100)*1;    // De X-as snelheid (in frames) per seconde
-    var stapY = 0//(canvasWidth/100)*1;    // De Y-as snelheid (in frames) per seconde
+    var stapX = 0    // De X-as snelheid (in frames) per seconde
+    var stapY = 0    // De Y-as snelheid (in frames) per seconde
     var straal = 10;  // De straal van de bal
     var hoogtePlatform = (canvasHeight/100)*15;   // De hoogte van de platform (in pixels)
     var platform1X = (canvasWidth/100)*5    // Beginpositie X-as platform links
@@ -206,17 +206,17 @@ html, body {
         drawDisc( x, y, straal );
         drawMiddelline();
 
-        if (beginCount == 0){
-            mijnCanvasje.onclick = function startSpel() {
-                if (beginCount == 0){
-                    stapX = (canvasWidth/100)*1
-                    stapY = (canvasWidth/100)*1
+        if (beginCount == 0){   //Deze if zorgt er voor dat deze onclick actie maar één keer uitgevoerd kan worden
+            mijnCanvasje.onclick = function startSpel() {   //Klikken om het spel te beginnen
+                if (beginCount == 0){      //Opnieuw, maar één eer uitvoeren, anders blijft hij in de function zitten
+                    stapX = (canvasWidth/100)*1     //Balsnelheid
+                    stapY = (canvasWidth/100)*1     //Balsnelheid
                     beginCount = 1
                 }
             }
         }
       
-        if (hitCounter % 2 != 0) {
+        if (hitCounter % 2 != 0) {  //Dit platform is alleen te raken als de hitcounter oneven is
             if(x <= (canvasWidth/100)*5 + straal + 10 && x >= (canvasWidth/100)*5){   // Checken of het linker platform wordt geraakt 
                 hitCounter++
                 if (hitCounter % 5 == 0) {    // Bij elke 5 aanrakingen de balSneller() functie uitoeren
@@ -238,7 +238,7 @@ html, body {
                 }
             }
         }
-        if (hitCounter % 2 == 0){
+        if (hitCounter % 2 == 0){   //Dit platform is alleen te raken als de hitcounter even is
             if (x >= (canvasWidth/100)*95 - straal && x <= (canvasWidth/100)*95 + straal + 50){    // Checken of het rechter platform wordt geraakt
                 hitCounter++
                 if (hitCounter % 5 == 0){  // Bij elke 5 aanrakingen de balSneller() functie uitoeren
@@ -254,7 +254,7 @@ html, body {
                    stapX =- stapX
                    navigator.vibrate(200);  
                 }
-                if (y <= balkRechts.positie.y + 95 && y >= balkRechts.positie.y) {     //Checken of het midden van het platform geraatk wordt
+                if (y <= balkRechts.positie.y + 95 && y >= balkRechts.positie.y) {     //Checken of het midden van het platform geraakt wordt
                    stapX = -stapX
                    navigator.vibrate(200);  
                 }
@@ -281,16 +281,15 @@ html, body {
         }
 
         function resetBal(winnaar) {
-            console.log(winnaar)
             if (winnaar == "speler1") {   // Welke speler heeft gewonnen?
-                var anderGetal = 0
+                var anderGetal = 0      //Variable naar 0 zetten
                 x = (w/100)*75  // Set bal X-as positie
                 y = h/2     // Set bal Y-as positie
                 stapX = 0     // Snelheid X-as 5px per sec
                 stapY = 0     // Snelheid Y-as 5px per sec
                 hitCounter = 1    // Reset de hitCounter
-                mijnCanvasje.onclick = function beginSpelRechts() {
-                    if (anderGetal == 0) {
+                mijnCanvasje.onclick = function beginSpelRechts() {     //De functie beginSpelRechts() uitvoeren als er op het canvas geklikt wordt
+                    if (anderGetal == 0) {      //Deze if zorgt er voor dat je maar één keer de onclick actie kan uitvoeren
                         stapX = -(canvasWidth/100)*1
                         stapY = -(canvasWidth/100)*1
                         anderGetal = 1
@@ -298,14 +297,14 @@ html, body {
                 }
             }
             if (winnaar == "speler2") {   // Welke speler heeft gewonnen?
-                var anderGetal = 0
+                var anderGetal = 0      //Variable naar 0 zetten
                 x = (w/100)*25    // Set bal X-as positie
                 y = h/2     // Set bal Y-as positie
                 stapX = 0    // Snelheid X-as 5px per sec
                 stapY = 0   // Snelheid Y-as 5px per sec
                 hitCounter = 0    // Reset de hitCounter
-                mijnCanvasje.onclick = function beginSpelLinks() {
-                    if (anderGetal == 0) {
+                mijnCanvasje.onclick = function beginSpelLinks() {      //De functie beginSpelRechts() uitvoeren als er op het canvas geklikt wordt
+                    if (anderGetal == 0) {      //Deze if zorgt er voor dat je maar één keer de onclick actie kan uitvoeren
                         stapX = (canvasWidth/100)*1
                         stapY = (canvasWidth/100)*1
                         anderGetal = 1
@@ -329,6 +328,7 @@ html, body {
             stapY-=2
         }
    }
+
 </script>
 </body>
 </html>
